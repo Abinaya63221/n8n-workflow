@@ -1,0 +1,315 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "AI-Powered Advertisement Generator",
+        "formDescription": "Get a creative ad idea instantly!\nJust tell us about your product and target audience, and our AI will generate a catchy ad — complete with a headline, slogan, and short copy. Your personalized suggestion will be delivered straight to your email.\n\nLet’s boost your brand with AI magic!",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "name"
+            },
+            {
+              "fieldLabel": "email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "brand",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "product name"
+            },
+            {
+              "fieldLabel": "language"
+            },
+            {
+              "fieldLabel": "tone",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "funny"
+                  },
+                  {
+                    "option": "motivational"
+                  },
+                  {
+                    "option": "commercial"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "99347fb4-6038-4673-b2ee-267c7581d564",
+      "name": "On form submission",
+      "webhookId": "55ac0a05-a203-4b75-8c76-7dd5405bcd3a"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1gi4nztWgDPNTb43czSJE_OpLNvILQmZm83g6cN4CIcg",
+          "mode": "list",
+          "cachedResultName": "advertisment",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gi4nztWgDPNTb43czSJE_OpLNvILQmZm83g6cN4CIcg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gi4nztWgDPNTb43czSJE_OpLNvILQmZm83g6cN4CIcg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "email": "={{ $json.email }}",
+            "brand": "={{ $json.brand }}",
+            "product": "={{ $json['product name'] }}",
+            "language": "={{ $json.language }}",
+            "tone": "={{ $json.tone }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "product",
+              "displayName": "product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "language",
+              "displayName": "language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tone",
+              "displayName": "tone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "product name",
+              "displayName": "product name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "formMode",
+              "displayName": "formMode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6fd5501d-3253-46c3-a979-1901f98cd956",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "6uiw0QM9RJhdWJCO",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional multilingual ad copywriter.\n\nGenerate a short and engaging advertisement for the following:\n\n- Brand: {{ $json.brand }}\n- Product: {{ $json.product }}\n- Target Language: {{ $json.language }}\n- Tone: {{ $json.tone }}\nThe ad should be written entirely in the specified language and should match the tone (e.g., fun, formal, emotional, inspiring).\n\nProvide the output in this email-ready format:\n\nSubject: [Catchy subject line in the target language]\n\nBody:\nHeadline: [Catchy headline in the target language]  \nSlogan: [Memorable slogan in the target language]  \nAd Copy: [Short paragraph ad in the target language, fitting the tone]  \nCTA: [One-line call to action]\n\nMake sure the result reads like a professional marketing email that can be sent to a customer.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "59db47b0-6139-499f-8c5c-439df871d072",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        288,
+        208
+      ],
+      "id": "eadd2f45-4bfd-4b9e-9fc8-ebc97a9075dd",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "S4SjoRD51mPoeac9",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.email }}",
+        "subject": "Suggestion for your Advertisment",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        768,
+        0
+      ],
+      "id": "33f6cbec-9379-4a78-b24f-2b169b35b9cb",
+      "name": "Send a message",
+      "webhookId": "af4b8c9a-279b-463e-91b4-4d3a87243403",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "3I0cZV3KDD41HL8I",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4f676deb-1227-4dc0-a48e-ca8453896378",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4c547104402bd96dd0658db4c1ac41e03f63a168e08700cf0b07e90635bb38b2"
+  },
+  "id": "HUQci5GCsLW7XVNQ",
+  "tags": []
+}
